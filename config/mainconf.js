@@ -3,26 +3,27 @@ module.exports = {
     'commondb_connection': {
         'multipleStatements': true,
         'connectionLimit' : 100,
-        'host': '10.11.4.97',
-        'user': 'AppUser',
-        'password': 'Special888%',
-        'port'    :  3306
+        'host': '10.11.90.15',
+        'user': 'purchasing',
+        'password': 'Purc@0001',
+        'port'    :  3306,
+        'database': 'Purchasing'
     },
     'session_connection': {
         'multipleStatements': true,
         'connectionLimit' : 100,
-        'host': '10.11.4.97',
-        'user': 'SessionManager',
-        'password': 'SManager$44',
+        'host': '10.11.90.15',
+        'user': 'purchasing',
+        'password': 'Purc@0001',
         'port'    :  3306
     },
 
-    'Session_db': 'session_DB',
-    'Login_db': 'FFAW',
+    'Session_db': 'Purchasing',
+    'Login_db': 'Purchasing',
     'Login_table': 'Users',
-    'Upload_db': 'FFAW',
+    'Upload_db': 'Purchasing',
 
-    'Server_Port': 9088,
+    'Server_Port': 7999,
 
     'Upload_Path': '/Users/ftaaworldbridgelab/Desktop/Test'
 

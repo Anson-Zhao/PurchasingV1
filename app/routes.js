@@ -85,11 +85,13 @@ module.exports = function (app, passport) {
         updateDBNredir(myStat, myVal, myErrMsg, "login.ejs", "/userhome", res);
     });
 
+    // show the forgot pages
     app.get('/forgot', function (req, res) {
         res.render('forgotPassword.ejs', {message: req.flash('forgotPassMessage')});
 
     });
 
+    // process forgot password request
     app.post('/email', function (req, res) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
         async.waterfall([
