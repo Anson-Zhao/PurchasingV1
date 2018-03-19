@@ -220,7 +220,7 @@ select {
 .banner {
     display: inline-block;
     text-align: center;
-    width: 100%;
+    width: auto;
 }
 
 /* The Modal (background) */
