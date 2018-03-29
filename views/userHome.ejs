@@ -29,6 +29,7 @@
         .banner{
             position:relative;
             width: auto;
+            float: left;
         }
         .floating-Box{
             display: inline;
@@ -144,81 +145,76 @@
                 font-size: 12px;
             }
         }
-            /* for 375px or less */
-            @media screen and (max-width:375px) {
-                #firstName{
-                    width:20%;
-                    height:20px;
-                    margin-left:-10px;
-                }
-                #lastName{
-                    width:20%;
-                    height:20px;
-                }
-                h1{
-                    font-size:25px;
-                }
+        /* for 375px or less */
+        @media screen and (max-width:375px) {
+            #firstName{
+                width:20%;
+                height:20px;
+                margin-left:-10px;
             }
-            /* for 320px or less */
-            @media screen and (max-width:320px) {
-                .button{
-                    font-size:100%;
-                    width:20%;
-                }
-                .floatingBox3{
-                    display: inline-table;
-                    width:350px;
-                }
-                select{
-                    width:35%;
-                }
-                input{
-                    width:35%;
-                }
-                .date{
-                    width:21%;
-                    font-size:10px;
-                }
-                .btn{
-                    font-size:12px;
-                    padding:5px 6px;
-                    width:80px;
-                }
-                #firstName{
-                    width:20%;
-                    height:20px;
-                    margin-left:-10px;
-                }
-                #lastName{
-                    width:20%;
-                    height:20px;
-                }
-                h1{
-                    font-size:25px;
-                }
+            #lastName{
+                width:20%;
+                height:20px;
             }
+            h1{
+                font-size:25px;
+            }
+        }
+        /* for 320px or less */
+        @media screen and (max-width:320px) {
+            .button{
+                font-size:100%;
+                width:20%;
+            }
+            .floatingBox3{
+                display: inline-table;
+                width:350px;
+            }
+            select{
+                width:35%;
+            }
+            input{
+                width:35%;
+            }
+            .date{
+                width:21%;
+                font-size:10px;
+            }
+            .btn{
+                font-size:12px;
+                padding:5px 6px;
+                width:80px;
+            }
+            #firstName{
+                width:20%;
+                height:20px;
+                margin-left:-10px;
+            }
+            #lastName{
+                width:20%;
+                height:20px;
+            }
+            h1{
+                font-size:25px;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <a href="//aworldbridge.com">
-        <img class="banner" src="/pic/NewWBBanner.jpg" />
-    </a>
-    <br>
-    <br>
-    <div class="page-header text-center header">
-        <h1><span class="fa fa-anchor"></span> FAW Project -  User Home </h1><h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>: <%= user.username %></h4><br>
-        <a href="/newEntry" class="btn btn-default btn-lg">New Entry</a>&nbsp;&nbsp;
-        <a href="/dataHistory" class="btn btn-default btn-lg">Data History</a>&nbsp;&nbsp;
-        <a href="/recovery" id="restoreButton" class="btn btn-default btn-lg" type="button">Recovery</a>&nbsp;&nbsp;
-        <div class="dropdown floating-Box">
-            <button class="btn btn-primary btn-lg" data-toggle="dropdown" id="Username"><%= user.firstName%>
-                <span class="caret"></span></button>
-            <ul id="userMenu" class="dropdown-menu">
 
-            </ul>
+    <div class="page-header header ">
+        <a href="//aworldbridge.com">
+            <img class="banner" src="/pic/NewWBBanner.jpg" />
+        </a>
+        <br>
+        <h1><span class="fa fa-anchor"></span> FAW Project -  User Home </h1><h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>: <%= user.username %></h4><br>
+        <div id = 'UserMenu'>
+
         </div>
+        <br>
     </div>
+
 </div>
 <br>
 <div class="container">
@@ -284,8 +280,8 @@
                 <option value="Trap_serviced_date">3.Trap Serviced Date</option>
             </select>
         </h5>
-		<h5 class="floatingBox3" >Content:&nbsp;&nbsp;<input type="text" class="content"></h5><br>
-		<h5 class="floatingBox3">Category2:&nbsp;
+        <h5 class="floatingBox3" >Content:&nbsp;&nbsp;<input type="text" class="content"></h5><br>
+        <h5 class="floatingBox3">Category2:&nbsp;
             <select class="filter">
                 <option value="">Select A Field</option>
                 <option value="1Location_name">1.Location Name</option>
@@ -328,8 +324,8 @@
                 <option value="Trap_serviced_date">3.Trap Serviced Date</option>
             </select>
         </h5>
-		<h5 class="floatingBox3">Content:&nbsp;&nbsp;<input type="text" class="content"></h5><br>
-		<h5 class="floatingBox3">Category3:&nbsp;
+        <h5 class="floatingBox3">Content:&nbsp;&nbsp;<input type="text" class="content"></h5><br>
+        <h5 class="floatingBox3">Category3:&nbsp;
             <select class="filter">
                 <option value="">Select A Field</option>
                 <option value="1Location_name">1.Location Name</option>
@@ -372,17 +368,17 @@
                 <option value="Trap_serviced_date">3.Trap Serviced Date</option>
             </select>
         </h5>
-		<h5 class="floatingBox3">Content:&nbsp;&nbsp;<input type="text" class="content"></h5>
-	</div><br>
-	<div class="center">
-		<button id="submitButton" class="btn btn-primary btn-sm button" type="button" onclick="query()">Filter</button>
-		<button id="editButton" class="btn btn-primary btn-sm button" type="button">Edit</button>
-		<button id="deleteButton" class="btn btn-primary btn-sm button" type="button">Delete</button>
+        <h5 class="floatingBox3">Content:&nbsp;&nbsp;<input type="text" class="content"></h5>
+    </div><br>
+    <div class="center">
+        <button id="submitButton" class="btn btn-primary btn-sm button" type="button" onclick="query()">Filter</button>
+        <button id="editButton" class="btn btn-primary btn-sm button" type="button">Edit</button>
+        <button id="deleteButton" class="btn btn-primary btn-sm button" type="button">Delete</button>
     </div>
     <br>
     <div class="center">
         <h4 id="subtitles"><strong>Most Recent Records:</strong></h4>
-	    <h4 id="subtitles"><strong>Most Recent Records:</strong></h4>
+        <h4 id="subtitles"><strong>Most Recent Records:</strong></h4>
         <h4 style="color: #9d9d9d"><strong>Scouting:</strong></h4>
         <div id="dvData">
             <table id="dataDisplay">
@@ -530,7 +526,7 @@
     </div>
 </div>
 <script type='text/javascript'>
-    var scoutingRowSelected, trapRowSelected, DropMenu, queryString1, queryString2;
+    var scoutingRowSelected, trapRowSelected, c_Buttons, queryString1, queryString2;
     var table = $("#dataDisplay").DataTable();
     var trapTable = $("#trapDisplay").DataTable();
     var UserRole = "<%= user.userrole %>";
@@ -544,20 +540,42 @@
                 dateFormat: "Y-m-d",
                 time_24hr: true
             });
-            
-            if (UserRole === "Admin") {
-                DropMenu = "<li><a href=\"/userprofile\">Profile</a></li>\n" +
-                    "\t\t\t<li><a href=\"/userManagement\">User Management</a></li>\n" +
-                    "\t\t\t<li><a href=\"/signout\">Sign Out</a></li>";
-                $("#userMenu").empty();
-                $("#userMenu").append(DropMenu)
-            } else if ( UserRole === "Regular") {
-                DropMenu = "<li><a href=\"/userprofile\">Profile</a></li>\n" +
-                    "\t\t\t<li><a href=\"/signout\">Sign Out</a></li>";
-                $("#userMenu").empty();
-                $("#userMenu").append(DropMenu)
-            }
 
+            if (UserRole === "Admin") {
+                var Button = $("<div class=\"btn-group\">" +
+                    "<a href = '/userManagement' class = 'btn btn-default btn-lg btn-primary'>User management</a>" +
+                    "        <a href='newEntry' class='btn btn-default btn-lg btn-primary'>New Entry</a>" +
+                    "        <a href='recovery' id='restoreButton' class='btn btn-default btn-lg btn-primary' type='button'>Recovery</a>" +
+                    "        <a href=\"/dataHistory\" class=\"btn btn-default btn-lg btn-primary\">Data History</a>\n" +
+                    "        <a href='/userprofile' class='btn btn-default btn-lg btn-primary'>Profile</a>\n" +
+                    "        <a href='/signout' class='btn btn-default btn-lg btn-primary'>Log out</a>" +
+                    "</div>");
+                $("#UserMenu").append(Button);
+            }else if(UserRole === "Regular"){
+                var Button = $("<div class=\"btn-group\">" +
+                    "        <a href='newEntry' class='btn btn-default btn-lg btn-primary'>New Entry</a>" +
+                    "        <a href='recovery' id='restoreButton' class='btn btn-default btn-lg btn-primary' type='button'>Recovery</a>" +
+                    "        <a href=\"/dataHistory\" class=\"btn btn-default btn-lg btn-primary\">Data History</a>\n" +
+                    "        <a href='/userprofile' class='btn btn-default btn-lg btn-primary'>Profile</a>\n" +
+                    "        <a href='/signout' class='btn btn-default btn-lg btn-primary'>Log out</a>" +
+                    "</div>");
+                $("#UserMenu").append(Button);
+            }else if(UserRole === "Approver"){
+                var Button = $("<div class=\"btn-group\">" +
+                    "        <a href='newEntry' class='btn btn-default btn-lg btn-primary'>New Entry</a>" +
+                    "        <a href=\"/dataHistory\" class=\"btn btn-default btn-lg btn-primary\">Data History</a>\n" +
+                    "        <a href='/userprofile' class='btn btn-default btn-lg btn-primary'>Profile</a>\n" +
+                    "        <a href='/signout' class='btn btn-default btn-lg btn-primary'>Log out</a>" +
+                    "</div>");
+                $("#UserMenu").append(Button);
+            }else{
+                var Button = $("<div class=\"btn-group\">" +
+                    "        <a href=\"/dataHistory\" class=\"btn btn-default btn-lg btn-primary\">Data History</a>\n" +
+                    "        <a href='/userprofile' class='btn btn-default btn-lg btn-primary'>Profile</a>\n" +
+                    "        <a href='/signout' class='btn btn-default btn-lg btn-primary'>Log out</a>" +
+                    "</div>");
+                $("#UserMenu").append(Button);
+            }
             table.clear();
             table.draw();
             trapTable.clear();
@@ -741,7 +759,7 @@
                         }
                     }
                 } else {
-                    alert(resp[0].errMsg);
+                    //alert(resp[0].errMsg);
                 }
             }
         });

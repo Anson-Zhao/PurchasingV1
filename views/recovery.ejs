@@ -186,17 +186,14 @@
 </div><br><br>
 <div id="pageHeader" class="page-header text-center">
     <h1><span class="fa fa-anchor"></span> FAW Project -  Recovery </h1><h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>: <%= user.username %></h4><br>
-    <a href="/userhome" class="btn btn-default btn-lg"><span class="randomText">User Home</span></a>&nbsp;&nbsp;&nbsp;
-    <a href="/newEntry" class="btn btn-default btn-lg"><span class="randomText">New Entry</span></a>&nbsp;&nbsp;&nbsp;
-    <a href="/dataHistory" class="btn btn-default btn-lg"><span class="randomText">Data History</span></a>&nbsp;&nbsp;&nbsp;
-    <div class="dropdown floating-Box">
-        <button class="btn btn-primary btn-lg" type="button" data-toggle="dropdown" id="Username"><%= user.firstName%>
-            <span class="caret"></span></button>
-        <ul id="userMenu" class="dropdown-menu">
-
-        </ul>
+    <div class ="btn-group">
+    <a href="/userhome" class="btn btn-default btn-lg btn-primary"><span class="randomText">User Home</span></a>&nbsp;&nbsp;&nbsp;
+    <a href="/newEntry" class="btn btn-default btn-lg btn-primary"><span class="randomText">New Entry</span></a>&nbsp;&nbsp;&nbsp;
+    <a href="/dataHistory" class="btn btn-default btn-lg btn-primary"><span class="randomText">Data History</span></a>&nbsp;&nbsp;
     </div>
-</div>
+        <div id = 'UserMenu'>
+
+        </div>
 <br>
 <div class="container">
     <br>
@@ -367,18 +364,6 @@
                 time_24hr: true
             });
 
-            if (UserRole === "Admin") {
-                DropMenu = "<li><a href=\"/userprofile\">Profile</a></li>\n" +
-                    "\t\t\t<li><a href=\"/userManagement\">User Management</a></li>\n" +
-                    "\t\t\t<li><a href=\"/signout\">Sign Out</a></li>";
-                $("#userMenu").empty();
-                $("#userMenu").append(DropMenu)
-            } else if (UserRole === "Regular") {
-                DropMenu = "<li><a href=\"/userprofile\">Profile</a></li>\n" +
-                    "\t\t\t<li><a href=\"/signout\">Sign Out</a></li>";
-                $("#userMenu").empty();
-                $("#userMenu").append(DropMenu)
-            }
 
             table.clear();
             table.draw();

@@ -107,8 +107,9 @@
 
 <div class="container">
         <a href="//aworldbridge.com"><img class="banner" src="/pic/NewWBBanner.jpg"/></a>
-        <ul id="userMenu" class="dropdown-menu dropdown-menu-right">
-        </ul>
+    <div id = 'UserMenu'>
+
+    </div>
 
     <div class="container1">
         <br><br>
@@ -168,18 +169,18 @@
 
     $(document).ready(function(){
         if (UserRole === "Admin") {
-            DropMenu = "<li><a href=\"/userprofile\">Profile</a></li>\n" +
-                "\t\t\t<li><a href=\"/userManagement\">User Management</a></li>\n" +
-                "\t\t\t<li><a href=\"/signout\">Sign Out</a></li>";
-            $("#userMenu").empty();
-            $("#userMenu").append(DropMenu)
-        } else if ( UserRole === "Regular") {
-            DropMenu = "<li><a href=\"/userprofile\">Profile</a></li>\n" +
-                "\t\t\t<li><a href=\"/signout\">Sign Out</a></li>";
-            $("#userMenu").empty();
-            $("#userMenu").append(DropMenu)
+            var Button = $("<a href = '/userManagement' class = 'btn btn-default btn-lg'>User management</a>" +
+                "        <a href='newEntry' class='btn btn-default btn-lg'>New Entry</a>" +
+                "        <a href='recovery' id='restoreButton' class='btn btn-default btn-lg' type='button'>Recovery</a>");
+            $("#UserMenu").append(Button);
+        }else if(UserRole === "Regular"){
+            var Button = $("        <a href='newEntry' class='btn btn-default btn-lg'>New Entry</a>" +
+                "        <a href='recovery' id='restoreButton' class='btn btn-default btn-lg' type='button'>Recovery</a>");
+            $("#UserMenu").append(Button);
+        }else if(UserRole === "Approver"){
+            var Button = $("        <a href='newEntry' class='btn btn-default btn-lg'>New Entry</a>");
+            $("#UserMenu").append(Button);
         }
-    });
 
     function checkForm() {
         var oldP=document.getElementById("currentpassword").value;
