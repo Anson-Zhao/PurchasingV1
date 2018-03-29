@@ -28,6 +28,7 @@
         .banner{
             position:relative;
             width: auto;
+            float: left;
         }
         .floating-Box{
             display: inline;
@@ -161,12 +162,12 @@
 </head>
 <body>
 <div class="container">
-    <a href="//aworldbridge.com">
-        <img class="banner" src="/pic/NewWBBanner.jpg" />
-    </a>
-    <br>
-    <br>
-    <div class="page-header text-center">
+
+    <div class="page-header">
+        <a href="//aworldbridge.com">
+            <img class="banner" src="/pic/NewWBBanner.jpg" />
+        </a>
+        <br>
         <h1><span class="fa fa-anchor"></span> FAW Project -  Data History </h1>
         <h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>: <%= user.username %></h4>
         <br>
@@ -174,9 +175,8 @@
         <a href="/userhome" class="btn btn-default btn-lg btn-primary">User Home</a>&nbsp;&nbsp;
         <a href="/recovery2" id="restoreButton" class="btn btn-default btn-lg btn-primary" type="button">Recovery</a>&nbsp;&nbsp;
         </div>
-        <div id = 'UserMenu'>
-
-        </div>
+        <br>
+        <br>
     </div>
 </div>
 <br>
