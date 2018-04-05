@@ -292,11 +292,14 @@ module.exports = function (app, passport) {
 
             if (!results[0].userrole) {
                 console.log("Error");
-            } else if (results[0].userrole === "Admin" || "Regular") {
+            } else if (results[0].userrole === "Admin") {
                 // process the signup form
                 res.render('userManagement.ejs', {
                     user: req.user // get the user out of session and pass to template
                 });
+            }else{
+                console.log("Error");
+                res.redirect('/userHome')
             }
         });
     });
