@@ -154,19 +154,34 @@ module.exports = function (app, passport) {
     });
 
     app.get('/reset/:token', function(req, res) {
+        dateNtime();
+        console.log(dateTime);
+        console.log('000');
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
+            myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
+            connection.query(myStat, function (err, user) {
+                console.log(user[0].resetPasswordExpires);
+                console.log('111');
+                // if(err){
+                //     console.log('222');
+                //     res.redirect('/userhome')
+                // }
+                if(!user[0]){
+                    console.log('222');
+                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+                } else if(dateTime > user[0].resetPasswordExpires){
+                    console.log('333');
+                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+                } else if(user[0].resetPasswordToken + '' === req.params.token){
+                    console.log('555');
+                    res.render('reset.ejs', {user: user[0]});
+                }
+                else{
+                    console.log('666');
+                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+                }
+            });
 
-        myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
-
-        connection.query(myStat, function(err, user) {
-            dateNtime();
-
-            if (!user || dateTime > user[0].resetPasswordExpires) {
-                res.send('Password reset token is invalid or has expired. Please contact Administrator.');
-            } else {
-                res.render('reset.ejs', { user: user[0]});
-            }
-        });
     });
 
     app.post('/reset/:token', function(req, res) {
