@@ -9,7 +9,6 @@ var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
-
 var filePathName = "";
 var filePath, transactionID, myStat, myVal, myErrMsg, token, errStatus;
 var today, date2, date3, time2, time3, dateTime, tokenExpire;
@@ -39,7 +38,6 @@ var smtpTrans = nodemailer.createTransport({
 connection.query('USE ' + config.Login_db); // Locate Login DB
 
 module.exports = function (app, passport) {
-
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
 
@@ -95,8 +93,8 @@ module.exports = function (app, passport) {
     app.post('/email', function (req, res) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
         async.waterfall([
-            function(done) {
-                crypto.randomBytes(20, function(err, buf) {
+            function (done) {
+                crypto.randomBytes(20, function (err, buf) {
                     token = buf.toString('hex');
                     tokenExpTime();
                     done(err, token, tokenExpire);
@@ -119,7 +117,7 @@ module.exports = function (app, passport) {
                     }
                 });
             },
-            function(token, done, err) {
+            function (token, done, err) {
                 // Message object
                 var message = {
                     from: 'FTAA <aaaa.zhao@g.feitianacademy.org>', // sender info
@@ -133,8 +131,8 @@ module.exports = function (app, passport) {
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
                 };
 
-                smtpTrans.sendMail(message, function(error){
-                    if(error){
+                smtpTrans.sendMail(message, function (error) {
+                    if (error) {
                         console.log(error.message);
                         // alert('Something went wrong! Please double check if your email is valid.');
                         return;
@@ -147,97 +145,95 @@ module.exports = function (app, passport) {
                     }
                 });
             }
-        ], function(err) {
-                if (err) return next(err);
-                res.redirect('/forgot');
+        ], function (err) {
+            if (err) return next(err);
+            res.redirect('/forgot');
         });
     });
 
-    app.get('/reset/:token', function(req, res) {
+    app.get('/reset/:token', function (req, res) {
         dateNtime();
-        console.log(dateTime);
         console.log('000');
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
-            myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
-            connection.query(myStat, function (err, user) {
+        myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
+        connection.query(myStat, function (err, user) {
+            dateNtime();
+            console.log('111');
+            if (!user) {
+                console.log('222');
+                res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+            } else if (user[0]) {
                 console.log(user[0].resetPasswordExpires);
-                console.log('111');
-                // if(err){
-                //     console.log('222');
-                //     res.redirect('/userhome')
-                // }
-                if(!user[0]){
-                    console.log('222');
-                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
-                } else if(dateTime > user[0].resetPasswordExpires){
-                    console.log('333');
-                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
-                } else if(user[0].resetPasswordToken + '' === req.params.token){
+                console.log(dateTime + "  www");
+                if (user[0].resetPasswordToken === req.params.token && user[0].resetPasswordExpires <= dateTime) {
                     console.log('555');
                     res.render('reset.ejs', {user: user[0]});
                 }
-                else{
+                else {
                     console.log('666');
                     res.send('Password reset token is invalid or has expired. Please contact Administrator.');
                 }
-            });
-
+            } else {
+                console.log("9uirtjwqewuryefrveuywjesfgeurhjdufyewfudsfuygfuysgfuygdufgwe7fg87fgdf87wet7f7f7^F");
+                res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+            }
+        });
     });
 
     app.post('/reset/:token', function(req, res) {
-        res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
 
-        async.waterfall([
-            function(done) {
+    async.waterfall([
+        function(done) {
 
-                myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
+            myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
 
-                connection.query(myStat, function(err, user) {
-                    var userInfo = JSON.stringify(user, null, "\t");
+            connection.query(myStat, function(err, user) {
+                var userInfo = JSON.stringify(user, null, "\t");
 
-                    if (!user) {
-                        res.send('Password reset token is invalid or has expired. Please contact Administrator.');
-                    } else {
-                        var newPass = {
-                            Newpassword: bcrypt.hashSync(req.body.newpassword, null, null),
-                            ConfirmPassword: bcrypt.hashSync(req.body.Confirmpassword, null, null)
-                        };
+                if (!user) {
+                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+                } else {
+                    var newPass = {
+                        Newpassword: bcrypt.hashSync(req.body.newpassword, null, null),
+                        ConfirmPassword: bcrypt.hashSync(req.body.Confirmpassword, null, null)
+                    };
 
-                        var passReset = "UPDATE Users SET password = '" + newPass.Newpassword + "' WHERE username = '" + req.body.username + "'";
+                    var passReset = "UPDATE Users SET password = '" + newPass.Newpassword + "' WHERE username = '" + req.body.username + "'";
 
-                        connection.query(passReset, function (err, rows) {
-                            if (err) {
-                                console.log(err);
-                                res.send("New Password Insert Fail!");
-                            } else {
-                                done()
-                            }
-                        });
-                    }
+                    connection.query(passReset, function (err, rows) {
+                        if (err) {
+                            console.log(err);
+                            res.send("New Password Insert Fail!");
+                        } else {
+                            done()
+                        }
+                    });
+                }
 
-                });
-            }, function(user, done, err) {
+            });
+        }, function(user, done, err) {
 
-                var message = {
-                    from: 'FTAA <aaaa.zhao@g.feitianacademy.org>',
-                    to: req.body.username,
-                    subject: 'Your password has been changed',
-                    text: 'Hello,\n\n' +
-                    'This is a confirmation that the password for your account, ' + changeMail(req.body.username) + ' has just been changed.\n'
-                };
+            var message = {
+                from: 'FTAA <aaaa.zhao@g.feitianacademy.org>',
+                to: req.body.username,
+                subject: 'Your password has been changed',
+                text: 'Hello,\n\n' +
+                'This is a confirmation that the password for your account, ' + changeMail(req.body.username) + ' has just been changed.\n'
+            };
 
-                smtpTrans.sendMail(message, function (error) {
-                    if(error){
-                        console.log(error.message);
-                        // alert('Something went wrong! Please double check if your email is valid.');
-                        return;
-                    } else {
-                        res.redirect('/login');
-                    }
-                });
-            }
-        ]);
-    });
+            smtpTrans.sendMail(message, function (error) {
+                if(error){
+                    console.log(error.message);
+                    // alert('Something went wrong! Please double check if your email is valid.');
+                    return;
+                } else {
+                    res.redirect('/login');
+                }
+            });
+        }
+    ]);
+});
 
 
     // =====================================
@@ -1007,7 +1003,6 @@ module.exports = function (app, passport) {
         });
     });
 
-};
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
@@ -1023,15 +1018,13 @@ function isLoggedIn(req, res, next) {
 function dateNtime() {
     today = new Date();
     date2 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    time2 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    dateTime = date2 + ' ' + time2;
+    dateTime = date2;
 }
 
 function tokenExpTime() {
     today = new Date();
-    date3 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + (today.getDate()+1);
-    time3 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    tokenExpire = date3 + ' ' + time3;
+    date3 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + 1;
+    tokenExpire = date3;
 }
 
 function del_recov(StatusUpd, ErrMsg, targetURL, req, res) {
@@ -1217,14 +1210,14 @@ function changeMail(str) {
     var letter1 = spliti[0].substring(0, 1);
     var letter2 = spliti[0].substring(spliti[0].length - 1, spliti[0].length);
     var newFirst = letter1;
-    for(i = 0; i < spliti[0].length - 2; i++) {
+    for (i = 0; i < spliti[0].length - 2; i++) {
         newFirst += "*";
     }
     newFirst += letter2;
 
     var letter3 = spliti[1].substring(0, 1);
     var extension = letter3;
-    for(i = 0; i < spliti[1].split(".")[0].length - 1; i++) {
+    for (i = 0; i < spliti[1].split(".")[0].length - 1; i++) {
         extension += "*";
     }
     extension += "." + spliti[1].split(".")[1];
@@ -1232,3 +1225,4 @@ function changeMail(str) {
 
     return result;
 }
+};
