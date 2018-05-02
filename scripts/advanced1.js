@@ -57,11 +57,11 @@ $(document).ready(function () {
                 ]
             },
             {
-                "column": 9,
-                "type": "datepicker", // requires jQuery UI: http://http://jqueryui.com/download/
-                "options": {
-                    "icon": "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" // Optional
-                }
+                //"column": 9,
+                //"type": "datepicker", // requires jQuery UI: http://http://jqueryui.com/download/
+                //"options": {
+                    //"icon": "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" // Optional
+                //}
             }
             // Nothing specified for column 9 so it will default to text
 
