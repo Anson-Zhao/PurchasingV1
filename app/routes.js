@@ -472,6 +472,13 @@ module.exports = function (app, passport) {
         }
     });
 
+    app.get('/suspendUser', isLoggedIn, function(req, res) {
+        res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
+        dateNtime();
+
+        var username = req.query.usernameStr.split(",");
+        m
+
     // Retrieve user data from user management page
     var edit_User, edit_firstName, edit_lastName, edit_userrole, edit_status;
     app.get('/editUserQuery', isLoggedIn, function(req, res) {
