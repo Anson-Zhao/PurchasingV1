@@ -3,7 +3,7 @@
 Interested in working with us? See https://www.northernacademy.org/.
 -->
 <html lang="en">
-<link rel="shortcut icon" type="image/jpg" href="/pic/NewWBBanner.jpg/">
+<link rel="shortcut icon" type="image/jpg" href="/Ian_NEW-W3SCHOOLTUTORIAL/dataTable/NewWBBannercopy.jpg/">
 <head>
     <meta charset="UTF-8">
     <title>New Request</title>
@@ -16,9 +16,9 @@ Interested in working with us? See https://www.northernacademy.org/.
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <!--<script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>-->
     <script src = "//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type = "text/javascript"></script>
-    <script src="/scripts/dataTables.cellEdit.js"></script>
-    <script src="/scripts/advanced1.js"></script>
-    <script src = "/scripts/selected.js"></script>
+    <script src="dataTables.cellEdit.js"></script>
+    <script src="advanced1.js"></script>
+    <script src = "selected.js"></script>
     <script>
 
 
@@ -51,6 +51,7 @@ Interested in working with us? See https://www.northernacademy.org/.
         }
         .my-confirm-class {
             padding: 3px 6px;
+            font-family: 'Exo 2', sans-serif;
             font-size: 12px;
             color: white;
             text-align: center;
@@ -61,6 +62,7 @@ Interested in working with us? See https://www.northernacademy.org/.
         }
         .my-cancel-class {
             padding: 3px 6px;
+            font-family: 'Exo 2', sans-serif;
             font-size: 12px;
             color: white;
             text-align: center;
@@ -79,16 +81,20 @@ Interested in working with us? See https://www.northernacademy.org/.
         #bob {
             text-align:center;
         }
+        #gray {
+            color: rgb(132, 125, 125);
+        }
 
     </style>
 </head>
 <body>
 <h1>Vendor Selection List</h1>
 <p>required when single item price ≥ $500</p>
+<p id ="gray">please edit and select the data you want to submit</p>
 
 <hr><br>
 <!----<form id="form" action="/#p=verify_informations&g=4" method="POST">---->
-<form id="form">
+<form>
     <table id="example" class="stripe" style="width:100%" class="display select" cellspacing="0">
         <thead>
         <tr id="0">
@@ -105,7 +111,7 @@ Interested in working with us? See https://www.northernacademy.org/.
         <tbody>
         <tr id ="1">
             <td></td>
-            <td>New Item (Please Specify)</td>
+            <td>New Item </td>
             <td>Amazon</td>
             <td>http://www.amazon.com</td>
             <td>10</td>
@@ -114,7 +120,7 @@ Interested in working with us? See https://www.northernacademy.org/.
         </tr>
         <tr id ="2">
             <td></td>
-            <td>New Item (Please Specify)</td>
+            <td>New Item </td>
             <td>Target</td>
             <td>http://www.target.com</td>
             <td>10</td>
@@ -132,7 +138,7 @@ Interested in working with us? See https://www.northernacademy.org/.
         </tr>
         <tr id ="4">
             <td></td>
-            <td>Boys' Pants</td>
+            <td>New Item</td>
             <td>Walmart</td>
             <td>http://www.walmart.com</td>
             <td>10</td>
@@ -141,54 +147,54 @@ Interested in working with us? See https://www.northernacademy.org/.
         </tr>
         <tr id ="5">
             <td></td>
-            <td>Girls' Skirts</td>
-            <td>Nike</td>
-            <td>http://www.nike.com</td>
-            <td>10</td>
-            <td>10</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>----Optional----</td>
         </tr>
         <tr id ="6">
             <td></td>
-            <td>Boys' Shirts</td>
-            <td>Gap</td>
-            <td>http://www.gap.com</td>
-            <td>10</td>
-            <td>10</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>----Optional----</td>
         </tr>
         <tr id ="7">
             <td></td>
-            <td>Girls' Shirts</td>
-            <td>Superdry</td>
-            <td>http://www.superdry.com</td>
-            <td>10</td>
-            <td>10</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>----Optional----</td>
         </tr>
         <tr id ="8">
             <td></td>
-            <td>Boys' Ties</td>
-            <td>Ralph Lauren Corporation</td>
-            <td>http://www.www.ralphlauren.com</td>
-            <td>10</td>
-            <td>10</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>----Optional----</td>
         </tr>
         <tr id ="9">
             <td></td>
-            <td>Blazers</td>
-            <td>Uniqlo</td>
-            <td>http://www.uniqlo.com</td>
-            <td>10</td>
-            <td>10</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>----Optional----</td>
         </tr>
         <tr id ="10">
             <td></td>
-            <td>ID Cards</td>
-            <td>Apple</td>
-            <td>http://www.apple.com</td>
+            <td>New Item</td>
+            <td>Superdry</td>
+            <td>http://www.superdry.com</td>
             <td>10</td>
             <td>10</td>
             <td>----Optional----</td>
@@ -205,8 +211,8 @@ Interested in working with us? See https://www.northernacademy.org/.
         <tr id ="12">
             <td></td>
             <td>New Item (Please Specify)</td>
-            <td>Google Shopping</td>
-            <td>https://www.google.com/shopping</td>
+            <td>Ralph Lauren Corporation</td>
+            <td>http://www.www.ralphlauren.com</td>
             <td>10</td>
             <td>10</td>
             <td>Credit</td>
@@ -268,8 +274,8 @@ Interested in working with us? See https://www.northernacademy.org/.
         <tr id ="19">
             <td></td>
             <td>New Item (Please Specify)</td>
-            <td>Barnes & Noble</td>
-            <td>https://www.barnesandnoble.com/</td>
+            <td>Gap</td>
+            <td>http://www.gap.com</td>
             <td>10</td>
             <td>10</td>
             <td>Credit</td>
@@ -287,8 +293,8 @@ Interested in working with us? See https://www.northernacademy.org/.
         <tr id ="21">
             <td></td>
             <td>New Item (Please Specify)</td>
-            <td>Forever 21</td>
-            <td>https://www.forever21.com/</td>
+            <td>Uniqlo</td>
+            <td>http://www.uniqlo.com</td>
             <td>10</td>
             <td>10</td>
             <td>Credit</td>
@@ -296,8 +302,8 @@ Interested in working with us? See https://www.northernacademy.org/.
         <tr id ="22">
             <td></td>
             <td>New Item (Please Specify)</td>
-            <td>Northern Academy</td>
-            <td>https://www.northernacademy.org/</td>
+            <td>Nike</td>
+            <td>http://www.nike.com</td>
             <td>10</td>
             <td>10</td>
             <td>Credit</td>

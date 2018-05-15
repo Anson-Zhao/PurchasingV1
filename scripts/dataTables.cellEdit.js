@@ -352,7 +352,7 @@ $(document).ready(function (){
             $('#example tbody input[type="checkbox"]:checked').trigger('click');
             $('#submit').on('click', function(){
                 alert (
-                    "You have some items that are over or equal to USD$500. Please fill in the Vendor Selection Table below for those items."
+                    "Please select the rows you want to submit. "
                 )
             });
         }
