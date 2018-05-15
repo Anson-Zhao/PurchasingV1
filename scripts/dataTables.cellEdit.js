@@ -350,6 +350,11 @@ $(document).ready(function (){
             $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
         } else {
             $('#example tbody input[type="checkbox"]:checked').trigger('click');
+            $('#submit').on('click', function(){
+                alert (
+                    "You have some items that are over or equal to USD$500. Please fill in the Vendor Selection Table below for those items."
+                )
+            });
         }
 
         // Prevent click event from propagating to parent
@@ -366,7 +371,9 @@ $(document).ready(function (){
     /*$('#example').on('click', 'tr', function () {
         console.log(scoutingrowselected= table.rows('.selected').data);
     });*/
+
 });
+
 
 
 
