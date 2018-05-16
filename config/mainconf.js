@@ -3,7 +3,7 @@ module.exports = {
     'commondb_connection': {
         'multipleStatements': true,
         'connectionLimit' : 100,
-        'host': '10.11.90.15',
+        'host': '10.11.4.249',
         'user': 'purchasing',
         'password': 'Purc@0001',
         'port'    :  3306,
@@ -12,7 +12,7 @@ module.exports = {
     'session_connection': {
         'multipleStatements': true,
         'connectionLimit' : 100,
-        'host': '10.11.90.15',
+        'host': '10.11.4.249',
         'user': 'purchasing',
         'password': 'Purc@0001',
         'port'    :  3306

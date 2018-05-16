@@ -11,7 +11,7 @@ var async = require('async');
 var crypto = require('crypto');
 var filePathName = "";
 var filePath, transactionID, myStat, myVal, myErrMsg, token, errStatus;
-var today, date2, date3, time2, time3, dateTime, tokenExpire;
+var today, date2, date3, time2, time3, dateTime, tokenExpire , Vtoken , message;
 
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -54,13 +54,14 @@ module.exports = function (app, passport) {
     // =====================================
     // show the login form
     app.get('/login', function (req, res) {
-
         // render the page and pass in any flash data if it exists
         res.render('login.ejs', {message: req.flash('loginMessage')});
     });
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
+
+
             successRedirect: '/loginUpdate', // redirect to the secure profile section
             failureRedirect: '/login', // redirect back to the signup page if there is an error
             failureFlash: true // allow flash messages
@@ -86,86 +87,98 @@ module.exports = function (app, passport) {
     // show the forgot pages
     app.get('/forgot', function (req, res) {
         res.render('forgotPassword.ejs', {message: req.flash('forgotPassMessage')});
-
     });
 
     // process forgot password request
     app.post('/email', function (req, res) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
-        async.waterfall([
-            function (done) {
-                crypto.randomBytes(20, function (err, buf) {
-                    token = buf.toString('hex');
-                    tokenExpTime();
-                    done(err, token, tokenExpire);
-                });
-            },
-            function (token, tokenExpire, done) {
-                // connection.query( "INSERT INTO Users ( resetPasswordExpires, resetPasswordToken ) VALUES (?,?) WHERE username = '" + req.body,username + "'; ")
-                myStat = "UPDATE Users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE username = '" + req.body.username + "' ";
-                myVal = [token, tokenExpire];
-                connection.query(myStat, myVal, function (err, rows) {
+        myStat = "SELECT * FROM Users WHERE username = '" + req.body.username + "'";
+        connection.query(myStat, function (err, user) {
+            if(!user[0]){
+                console.log('ooo');
+                res.send('Please check if your email is valid.');
+            } else {
+                console.log('eee');
+                async.waterfall([
+                    function (done) {
+                        crypto.randomBytes(20, function (err, buf) {
+                            token = buf.toString('hex');
+                            tokenExpTime();
+                            done(err, token, tokenExpire);
+                        });
+                    },
+                    function (token, tokenExpire, done) {
+                        // connection.query( "INSERT INTO Users ( resetPasswordExpires, resetPasswordToken ) VALUES (?,?) WHERE username = '" + req.body,username + "'; ")
+                        myStat = "UPDATE Users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE username = '" + req.body.username + "' ";
+                        myVal = [token, tokenExpire];
+                        connection.query(myStat, myVal, function (err, rows) {
 
-                    //newUser.id = rows.insertId;
+                            //newUser.id = rows.insertId;
 
-                    if (err) {
-                        console.log(err);
-                        res.send("Token Insert Fail!");
-                        res.end();
-                    } else {
-                        done(err, token);
+                            if (err) {
+                                console.log(err);
+                                res.send("Token Insert Fail!");
+                                res.end();
+                            } else {
+                                done(err, token);
+                            }
+                        });
+                    },
+                    function (token, done, err) {
+                        // Message object
+                        var message = {
+                            from: 'FTAA <aaaa.zhao@g.feitianacademy.org>', // sender info
+                            to: req.body.username, // Comma separated list of recipients
+                            subject: 'Password Reset', // Subject of the message
+
+                            // plaintext body
+                            text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                            'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                            'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                            'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                        };
+
+                        smtpTrans.sendMail(message, function (error) {
+                            if (error) {
+                                console.log(error.message);
+                                //alert('Something went wrong! Please double check if your email is valid.');
+                                return;
+                            } else {
+                                res.send('Message sent successfully! Please check your email inbox.');
+                                console.log('Message sent successfully!');
+                                console.log('Email sent: ' + info.response);
+                                res.redirect('/login');
+                                // alert('An e-mail has been sent to ' + req.body.username + ' with further instructions.');
+                            }
+                        });
                     }
-                });
-            },
-            function (token, done, err) {
-                // Message object
-                var message = {
-                    from: 'FTAA <aaaa.zhao@g.feitianacademy.org>', // sender info
-                    to: req.body.username, // Comma separated list of recipients
-                    subject: 'Password Reset', // Subject of the message
-
-                    // plaintext body
-                    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                    'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-                };
-
-                smtpTrans.sendMail(message, function (error) {
-                    if (error) {
-                        console.log(error.message);
-                        // alert('Something went wrong! Please double check if your email is valid.');
-                        return;
-                    } else {
-                        res.send('Message sent successfully! Please check your email inbox.');
-                        console.log('Message sent successfully!');
-                        console.log('Email sent: ' + info.response);
-                        res.redirect('/login');
-                        // alert('An e-mail has been sent to ' + req.body.username + ' with further instructions.');
-                    }
+                ], function (err) {
+                    if (err) return next(err);
+                    res.redirect('/forgot');
                 });
             }
-        ], function (err) {
-            if (err) return next(err);
-            res.redirect('/forgot');
         });
     });
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     app.get('/reset/:token', function (req, res) {
         dateNtime();
         console.log('000');
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
         myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
         connection.query(myStat, function (err, user) {
-            dateNtime();
+            // dateNtime();
             console.log('111');
-            if (!user) {
+            if (!user[0]) {
                 console.log('222');
                 res.send('Password reset token is invalid or has expired. Please contact Administrator.');
-            } else if (user[0]) {
+            } else {
                 console.log(user[0].resetPasswordExpires);
-                console.log(dateTime + "  www");
-                if (user[0].resetPasswordToken === req.params.token && user[0].resetPasswordExpires <= dateTime) {
+                console.log(dateTime);
+                if (user[0].resetPasswordExpires > dateTime) {
                     console.log('555');
                     res.render('reset.ejs', {user: user[0]});
                 }
@@ -173,69 +186,66 @@ module.exports = function (app, passport) {
                     console.log('666');
                     res.send('Password reset token is invalid or has expired. Please contact Administrator.');
                 }
-            } else {
-                console.log("9uirtjwqewuryefrveuywjesfgeurhjdufyewfudsfuygfuysgfuygdufgwe7fg87fgdf87wet7f7f7^F");
-                res.send('Password reset token is invalid or has expired. Please contact Administrator.');
             }
         });
     });
 
     app.post('/reset/:token', function(req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
+        res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
 
-    async.waterfall([
-        function(done) {
+        async.waterfall([
+            function(done) {
 
-            myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
+                myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
 
-            connection.query(myStat, function(err, user) {
-                var userInfo = JSON.stringify(user, null, "\t");
+                connection.query(myStat, function(err, user) {
+                    var userInfo = JSON.stringify(user, null, "\t");
 
-                if (!user) {
-                    res.send('Password reset token is invalid or has expired. Please contact Administrator.');
-                } else {
-                    var newPass = {
-                        Newpassword: bcrypt.hashSync(req.body.newpassword, null, null),
-                        ConfirmPassword: bcrypt.hashSync(req.body.Confirmpassword, null, null)
-                    };
+                    if (!user) {
+                        res.send('Password reset token is invalid or has expired. Please contact Administrator.');
+                    } else {
+                        var newPass = {
+                            Newpassword: bcrypt.hashSync(req.body.newpassword, null, null),
+                            ConfirmPassword: bcrypt.hashSync(req.body.Confirmpassword, null, null)
+                        };
 
-                    var passReset = "UPDATE Users SET password = '" + newPass.Newpassword + "' WHERE username = '" + req.body.username + "'";
+                        var passReset = "UPDATE Users SET password = '" + newPass.Newpassword + "' WHERE username = '" + req.body.username + "'";
 
-                    connection.query(passReset, function (err, rows) {
-                        if (err) {
-                            console.log(err);
-                            res.send("New Password Insert Fail!");
-                        } else {
-                            done()
-                        }
-                    });
-                }
+                        connection.query(passReset, function (err, rows) {
+                            if (err) {
+                                console.log(err);
+                                res.send("New Password Insert Fail!");
+                            } else {
+                                done()
+                            }
+                        });
+                    }
 
-            });
-        }, function(user, done, err) {
-
-            var message = {
-                from: 'FTAA <aaaa.zhao@g.feitianacademy.org>',
-                to: req.body.username,
-                subject: 'Your password has been changed',
-                text: 'Hello,\n\n' +
-                'This is a confirmation that the password for your account, ' + changeMail(req.body.username) + ' has just been changed.\n'
-            };
-
-            smtpTrans.sendMail(message, function (error) {
-                if(error){
-                    console.log(error.message);
-                    // alert('Something went wrong! Please double check if your email is valid.');
-                    return;
-                } else {
-                    res.redirect('/login');
-                }
-            });
-        }
-    ]);
-});
-
-
+                });
+            }
+        ]);
+    });
+    // =====================================
+    // VERIFY EMAIL  =======================
+    // =====================================
+    app.get('/verify/:token', function (req, res) {
+        dateNtime();
+        console.log('000');
+        res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
+        myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
+        connection.query(myStat, function (err, user) {
+            console.log('111');
+            if (!user[0]) {
+                console.log('222');
+                res.send('Verify token is invalid or has expired. Please contact Administrator.');
+            } else {
+                var Verified = "UPDATE Users SET userrole = '" + 'Never Logged In' + "' WHERE username = '" + user[0].username + "'";
+                connection.query(Verified, function (err, user) {
+                    res.send('Email Verified!')
+                });
+            }
+        });
+    });
     // =====================================
     // USER PROFILE  =======================
     // =====================================
@@ -339,7 +349,7 @@ module.exports = function (app, passport) {
             dateCreated: req.body.dateCreated,
             createdUser: req.body.createdUser,
             dateModified: req.body.dateCreated,
-            status: req.body.status
+            status: 'Unverified'
         };
 
         myStat = "INSERT INTO Users ( username, firstName, lastName, password, userrole, dateCreated, dateModified, createdUser, status) VALUES (?,?,?,?,?,?,?,?,?)";
@@ -347,17 +357,52 @@ module.exports = function (app, passport) {
         connection.query(myStat, myVal, function (err, rows) {
 
             //newUser.id = rows.insertId;
-
-            if (err) {
-                console.log(err);
-                res.send("New User Insert Fail!");
-                res.end();
-            } else {
-                res.render('userHome.ejs', {
-                    user: req.user // get the user out of session and pass to template
+                crypto.randomBytes(20, function (err, buf) {
+                    token = buf.toString('hex');
                 });
-            }
+                console.log(token + '');
+                console.log(token);
+            var Verified = "UPDATE Users SET verifytoken = '" + token + "' WHERE username = '" + newUser.username + "'";
+            connection.query(Verified, function (err, user) {
+                var Verified = "SELECT * from Users;";
+                connection.query(Verified, function (err, veriffy) {
+                console.log(newUser.username);
+                if (err) {
+                    console.log(err);
+                    res.send("New User Insert Fail!");
+                    res.end();
+                } else {
+                    // Message object
+                    message = {
+                        from: 'FTAA <aaaa.zhao@g.feitianacademy.org>', // sender info
+                        to: newUser.username, // Comma separated list of recipients
+                        subject: 'Verify email', // Subject of the message
+
+                        // plaintext body
+                        text: 'Please click on link below to verify account.\n' +
+                        'If you did not create an account then please ignore this email.\n'
+                        + 'http://' + req.headers.host + '/verify/' + veriffy[0].verifytoken
+                    };
+
+                            smtpTrans.sendMail(message, function (error) {
+                                if (error) {
+                                    console.log(error.message);
+                                    //alert('Something went wrong! Please double check if your email is valid.');
+                                    return;
+                                } else {
+                                    res.send('Email verify email sent! Please check your email inbox.');
+                                    console.log('Message sent successfully!');
+                                    console.log('Email sent: ' + info.response);
+                                    res.redirect('/login');
+                                    // alert('An e-mail has been sent to ' + req.body.username + ' with further instructions.');
+                                }
+
+                    });
+                }
+                });
+            });
         });
+
     });
 
     // Filter by search criteria
@@ -1017,14 +1062,15 @@ function isLoggedIn(req, res, next) {
 
 function dateNtime() {
     today = new Date();
-    date2 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    dateTime = date2;
+    date2 = today.getFullYear() + '-' + '0' +(today.getMonth() + 1) + '-' + '0' + today.getDate();
+    time2 = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+    dateTime = date2 +  ' ' + time2;
 }
-
 function tokenExpTime() {
     today = new Date();
-    date3 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + 1;
-    tokenExpire = date3;
+    date3 = today.getFullYear() + '-' + '0' +(today.getMonth() + 1) + '-' + '0' + today.getDate() + 1;
+    time3 = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+    tokenExpire = date3 + ' ' + time3;
 }
 
 function del_recov(StatusUpd, ErrMsg, targetURL, req, res) {
