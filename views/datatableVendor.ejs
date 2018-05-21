@@ -9,6 +9,7 @@ Interested in working with us? See https://www.northernacademy.org/.
     <title>New Request</title>
     <link href="https://fonts.googleapis.com/css?family=Comfortaa|Julius+Sans+One" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
@@ -16,9 +17,10 @@ Interested in working with us? See https://www.northernacademy.org/.
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <!--<script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>-->
     <script src = "//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type = "text/javascript"></script>
-    <script src="dataTables.cellEdit.js"></script>
-    <script src="advanced1.js"></script>
-    <script src = "selected.js"></script>
+    <script src="/scripts/dataTables.cellEdit.js"></script>
+    <script src="/scripts/advanced1.js"></script>
+    <script src = "/scripts/selected.js"></script>
+    <script src = "/scripts/vendor_data.js"></script>
     <script>
 
 
@@ -84,6 +86,10 @@ Interested in working with us? See https://www.northernacademy.org/.
         #gray {
             color: rgb(132, 125, 125);
         }
+        #WARNING {
+            font-family: 'EB Garamond', serif;
+            font-size: larger;
+        }
 
     </style>
 </head>
@@ -94,7 +100,8 @@ Interested in working with us? See https://www.northernacademy.org/.
 
 <hr><br>
 <!----<form id="form" action="/#p=verify_informations&g=4" method="POST">---->
-<form id="form" action="/vendorselection" method ="POST">
+
+<form id="form" action="/vendordata" method ="POST">
     <table id="example" class="stripe" style="width:100%" class="display select" cellspacing="0">
         <thead>
         <tr id="0">

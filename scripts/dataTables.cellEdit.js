@@ -331,7 +331,6 @@ $(document).ready(function (){
         } else {
             $row.removeClass('selected');
         }
-
         // Update state of "Select all" control
         updateDataTableSelectAllCtrl(table);
 
@@ -350,12 +349,13 @@ $(document).ready(function (){
             $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
         } else {
             $('#example tbody input[type="checkbox"]:checked').trigger('click');
-            $('#submit').on('click', function(){
-                alert (
-                    "Please select the rows you want to submit. "
-                )
-            });
+
         }
+        // $('#submit').on('click', function(){
+        //     alert (
+        //         "Please select the rows you want to submit. "
+        //     )
+        // });
 
         // Prevent click event from propagating to parent
         e.stopPropagation();
@@ -366,6 +366,7 @@ $(document).ready(function (){
         // Update state of "Select all" control
         updateDataTableSelectAllCtrl(table);
     });
+
 
     // Handle form submission event
     /*$('#example').on('click', 'tr', function () {
