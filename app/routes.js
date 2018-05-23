@@ -232,7 +232,7 @@ module.exports = function (app, passport) {
         dateNtime();
         console.log('000');
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
-        myStat = "SELECT * FROM Users WHERE resetPasswordToken = '" + req.params.token + "'";
+        myStat = "SELECT * FROM Users WHERE verifytoken = '" + req.params.token + "'";
         connection.query(myStat, function (err, user) {
             console.log('111');
             if (!user[0]) {
@@ -241,8 +241,8 @@ module.exports = function (app, passport) {
             } else {
                 var Verified = "UPDATE Users SET userrole = '" + 'Never Logged In' + "' WHERE username = '" + user[0].username + "'";
                 connection.query(Verified, function (err, user) {
-                    res.send('Email Verified!')
                 });
+                res.send('Email Verified!')
             }
         });
     });
@@ -351,58 +351,77 @@ module.exports = function (app, passport) {
             dateModified: req.body.dateCreated,
             status: 'Unverified'
         };
-
         myStat = "INSERT INTO Users ( username, firstName, lastName, password, userrole, dateCreated, dateModified, createdUser, status) VALUES (?,?,?,?,?,?,?,?,?)";
         myVal = [newUser.username, newUser.firstName, newUser.lastName, newUser.password, newUser.userrole, newUser.dateCreated, newUser.dateModified, newUser.createdUser, newUser.status];
         connection.query(myStat, myVal, function (err, rows) {
-
-            //newUser.id = rows.insertId;
-                crypto.randomBytes(20, function (err, buf) {
-                    token = buf.toString('hex');
-                });
-                console.log(token + '');
-                console.log(token);
-            var Verified = "UPDATE Users SET verifytoken = '" + token + "' WHERE username = '" + newUser.username + "'";
-            connection.query(Verified, function (err, user) {
-                var Verified = "SELECT * from Users;";
-                connection.query(Verified, function (err, veriffy) {
-                console.log(newUser.username);
-                if (err) {
-                    console.log(err);
-                    res.send("New User Insert Fail!");
-                    res.end();
-                } else {
-                    // Message object
-                    message = {
-                        from: 'FTAA <aaaa.zhao@g.feitianacademy.org>', // sender info
-                        to: newUser.username, // Comma separated list of recipients
-                        subject: 'Verify email', // Subject of the message
-
-                        // plaintext body
-                        text: 'Please click on link below to verify account.\n' +
-                        'If you did not create an account then please ignore this email.\n'
-                        + 'http://' + req.headers.host + '/verify/' + veriffy[0].verifytoken
-                    };
-
-                            smtpTrans.sendMail(message, function (error) {
-                                if (error) {
-                                    console.log(error.message);
-                                    //alert('Something went wrong! Please double check if your email is valid.');
-                                    return;
-                                } else {
-                                    res.send('Email verify email sent! Please check your email inbox.');
-                                    console.log('Message sent successfully!');
-                                    console.log('Email sent: ' + info.response);
-                                    res.redirect('/login');
-                                    // alert('An e-mail has been sent to ' + req.body.username + ' with further instructions.');
-                                }
-
-                    });
-                }
-                });
-            });
         });
+        myStat = "SELECT * FROM Users WHERE username = '" + req.body.username + "'";
+        connection.query(myStat, function (err, user) {
+            if (!user[0]) {
+                console.log('ooo');
+                res.send('Please check if your email is valid.');
+            } else {
+                console.log('eee');
+                async.waterfall([
+                    function (done) {
+                        crypto.randomBytes(20, function (err, buf) {
+                            token = buf.toString('hex');
+                            tokenExpTime();
+                            done(err, token, tokenExpire);
+                        });
+                    },
+                    function (token, tokenExpire, done) {
+                        // connection.query( "INSERT INTO Users ( resetPasswordExpires, resetPasswordToken ) VALUES (?,?) WHERE username = '" + req.body,username + "'; ")
+                        myStat = "UPDATE Users SET verifytoken = ? WHERE username = '" + req.body.username + "' ";
+                        myVal = [token, tokenExpire];
+                        connection.query(myStat, myVal, function (err, rows) {
 
+                            //newUser.id = rows.insertId;
+
+                            if (err) {
+                                console.log(err);
+                                res.send("Token Insert Fail!");
+                                res.end();
+                            } else {
+                                done(err, token);
+                            }
+                        });
+                    },
+                    function (token, done, err) {
+                        // Message object
+                        var message = {
+                            from: 'FTAA <aaaa.zhao@g.feitianacademy.org>', // sender info
+                            to: newUser.username, // Comma separated list of recipients
+                            subject: 'Verify email', // Subject of the message
+
+                            // plaintext body
+                            text: 'Please click on link below to verify account.\n' +
+                            'If you did not create an account then please ignore this email.\n'
+                            + 'http://' + req.headers.host + '/verify/' + token
+                        };
+
+                        smtpTrans.sendMail(message, function (error) {
+                            if (error) {
+                                console.log(error.message);
+                                //alert('Something went wrong! Please double check if your email is valid.');
+                                return;
+                            } else {
+                                res.send('Message sent successfully! Please check your email inbox.');
+                                console.log('Message sent successfully!');
+                                console.log('Email sent: ' + info.response);
+                                res.redirect('/login');
+                                // alert('An e-mail has been sent to ' + req.body.username + ' with further instructions.');
+                            }
+                        });
+                    }
+                ], function (err) {
+                    if (err) return next(err);
+                    res.redirect('/forgot');
+                });
+            }
+
+
+        });
     });
 
     // Filter by search criteria
