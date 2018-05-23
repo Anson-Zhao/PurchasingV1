@@ -86,7 +86,7 @@ Interested in working with us? See https://www.northernacademy.org/.
         #gray {
             color: rgb(132, 125, 125);
         }
-        #WARNING {
+        #text {
             font-family: 'EB Garamond', serif;
             font-size: larger;
         }
@@ -100,7 +100,7 @@ Interested in working with us? See https://www.northernacademy.org/.
 
 <hr><br>
 <!----<form id="form" action="/#p=verify_informations&g=4" method="POST">---->
-
+<p id = "thetext" style="display:block">NO SELECTION MADE</p>
 <form id="form" action="/vendordata" method ="POST">
     <table id="example" class="stripe" style="width:100%" class="display select" cellspacing="0">
         <thead>
@@ -322,6 +322,6 @@ Interested in working with us? See https://www.northernacademy.org/.
 </script>
 
 </table>
-<div id="bob"><input id="submit" type="submit" value="Submit"></div>
+<div id="bob"><input id="submit" form="form" type="submit" value="Submit"></div>
 </body>
 </html>

@@ -18,5 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post('/vendordata', function (req, res) {
-    console.log(req.body);
+console.log(req.body);
+console.log(req.data);
 });
+app.listen(7999);
