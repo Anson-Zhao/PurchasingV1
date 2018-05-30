@@ -2,7 +2,11 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var app = express();
+var expressValidator = require('express-validator');
 var fs = require('fs');
+// var body = require('express-validator/check');
+// var validationResult  = require('express-validator/check');
+// var sanitizeBody  = require('express-validator/filter');
 
 var con = mysql.createConnection({
     multipleStatements: true,
