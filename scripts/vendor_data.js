@@ -18,11 +18,13 @@ var con = mysql.createConnection({
     database: "Purchasing"
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/vendordata', function (req, res) {
-console.log(req.body);
-console.log(req.data);
+console.log(req.body.item);
+console.log(req.body.vendor);
+console.log(req.vendor);
+
 });
 app.listen(7999);

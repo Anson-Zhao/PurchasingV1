@@ -91,6 +91,11 @@ module.exports = function (app, passport) {
 
     });
 
+    //TO BE COMPLETED (THERE IS NO VENDORDATA.ejs)
+    app.post('/vendordata',function (req, res) {
+       res.render('vendordata.ejs');
+    });
+
     // process forgot password request
     app.post('/email', function (req, res) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
